@@ -103,12 +103,15 @@
                         <label for="specialization" class="form-label">التخصص</label>
                         <select class="form-select" id="specialization" required>
                             <option value="" selected disabled>اختر تخصصك</option>
-                            <option value="تصميم جرافيك">تصميم جرافيك</option>
-                            <option value="برمجة وتطوير">برمجة وتطوير</option>
-                            <option value="تسويق إلكتروني">تسويق إلكتروني</option>
-                            <option value="إدارة مشاريع">إدارة مشاريع</option>
-                            <option value="خدمة العملاء">خدمة العملاء</option>
-                            <option value="أخرى">أخرى</option>
+                            <option value="مصمم لوجو">مصمم لوجو</option>
+                            <option value="كاتب محتوى">كاتب محتوى</option>
+                            <option value="مصمم جرافيك">مصمم جرافيك</option>
+                            <option value="تعديل فيديوهات">تعديل فيديوهات</option>
+                            <option value="مصمم واجهات مواقع">مصمم واجهات مواقع</option>
+                            <option value="باك اند">باك اند</option>
+                            <option value="مسوق">مسوق</option>
+                            <option value="مصمم اعلانات سوشيال ميديا">مصمم اعلانات سوشيال ميديا</option>
+                            <option value="مدير مبيعات">مدير مبيعات</option>
                         </select>
                     </div>
                     
@@ -139,16 +142,15 @@
     
     <script>
         // تهيئة Firebase
-      const firebaseConfig = {
-  apiKey: "AIzaSyBm-N7xE6djhJDb4RlPDRBTiV2_eRIWrqc",
-  authDomain: "database-project-ff53b.firebaseapp.com",
-  databaseURL: "https://database-project-ff53b-default-rtdb.firebaseio.com",
-  projectId: "database-project-ff53b",
-  storageBucket: "database-project-ff53b.appspot.com",
-  messagingSenderId: "285356206299",
-  appId: "1:285356206299:web:f91320c13aec1bfc7c84fe"
-};
-        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBm-N7xE6djhJDb4RlPDRBTiV2_eRIWrqc",
+            authDomain: "database-project-ff53b.firebaseapp.com",
+            databaseURL: "https://database-project-ff53b-default-rtdb.firebaseio.com",
+            projectId: "database-project-ff53b",
+            storageBucket: "database-project-ff53b.appspot.com",
+            messagingSenderId: "285356206299",
+            appId: "1:285356206299:web:f91320c13aec1bfc7c84fe"
+        };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -162,13 +164,11 @@
         // معالجة إرسال الاستمارة
         document.getElementById('employmentForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // تعطيل الزر أثناء الإرسال
+
             const submitBtn = document.querySelector('.btn-submit');
             submitBtn.disabled = true;
             submitBtn.textContent = 'جاري الإرسال...';
-            
-            // جمع بيانات النموذج
+
             const applicantData = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
@@ -177,11 +177,9 @@
                 bio: document.getElementById('bio').value,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
-            
-            // إرسال البيانات إلى Firestore
+
             db.collection("applicants").add(applicantData)
                 .then(() => {
-                    // إظهار رسالة النجاح
                     document.getElementById('successMessage').style.display = 'block';
                     document.getElementById('employmentForm').reset();
                 })
@@ -190,7 +188,6 @@
                     alert("حدث خطأ أثناء إرسال البيانات: " + error.message);
                 })
                 .finally(() => {
-                    // إعادة تمكين الزر
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'تقديم الطلب';
                 });
