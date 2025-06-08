@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استمارة التوظيف</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+        .header h2 {
+            font-weight: 700;
+        }
+        .btn-submit {
+            background-color: #3498db;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .btn-submit:hover {
+            background-color: #2980b9;
+        }
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .ad-container {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .ad-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .ad-description {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .btn-apply {
+            background-color: white;
+            color: #3498db;
+            border: none;
+            padding: 10px 25px;
+            font-weight: 600;
+            border-radius: 50px;
+        }
+        .btn-apply:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- إعلان التوظيف -->
+        <div class="ad-container">
+            <h2 class="ad-title">انضم إلى فريقنا المتميز!</h2>
+            <p class="ad-description">نبحث عن مواهب مبدعة لتنضم إلى فريق العمل. إذا كنت تمتلك المهارات والخبرة التي نبحث عنها، لا تتردد في التقديم.</p>
+            <button class="btn-apply" onclick="scrollToForm()">قدم الآن</button>
+        </div>
+
+        <!-- استمارة التوظيف -->
+        <div class="row justify-content-center">
+            <div class="col-md-8 form-container">
+                <div class="header">
+                    <h2>استمارة التوظيف</h2>
+                    <p>يرجى ملء جميع الحقول المطلوبة</p>
+                </div>
+                
+                <form id="employmentForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">الاسم الكامل</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">رقم الهاتف</label>
+                        <input type="tel" class="form-control" id="phone" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="specialization" class="form-label">التخصص</label>
+                        <select class="form-select" id="specialization" required>
+                            <option value="" selected disabled>اختر تخصصك</option>
+                            <option value="تصميم جرافيك">تصميم جرافيك</option>
+                            <option value="برمجة وتطوير">برمجة وتطوير</option>
+                            <option value="تسويق إلكتروني">تسويق إلكتروني</option>
+                            <option value="إدارة مشاريع">إدارة مشاريع</option>
+                            <option value="خدمة العملاء">خدمة العملاء</option>
+                            <option value="أخرى">أخرى</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="portfolio" class="form-label">رابط معرض الأعمال (اختياري)</label>
+                        <input type="url" class="form-control" id="portfolio">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">نبذة عنك</label>
+                        <textarea class="form-control" id="bio" rows="4" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-submit">تقديم الطلب</button>
+                </form>
+                
+                <div id="successMessage" class="alert alert-success mt-3" style="display: none;">
+                    تم إرسال طلبك بنجاح! سنقوم بالتواصل معك قريبًا.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <script>
+        // تهيئة Firebase
+      const firebaseConfig = {
+  apiKey: "AIzaSyBm-N7xE6djhJDb4RlPDRBTiV2_eRIWrqc",
+  authDomain: "database-project-ff53b.firebaseapp.com",
+  databaseURL: "https://database-project-ff53b-default-rtdb.firebaseio.com",
+  projectId: "database-project-ff53b",
+  storageBucket: "database-project-ff53b.appspot.com",
+  messagingSenderId: "285356206299",
+  appId: "1:285356206299:web:f91320c13aec1bfc7c84fe"
+};
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // دالة للانتقال إلى الاستمارة
+        function scrollToForm() {
+            document.getElementById('employmentForm').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // معالجة إرسال الاستمارة
+        document.getElementById('employmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // تعطيل الزر أثناء الإرسال
+            const submitBtn = document.querySelector('.btn-submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري الإرسال...';
+            
+            // جمع بيانات النموذج
+            const applicantData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                specialization: document.getElementById('specialization').value,
+                portfolio: document.getElementById('portfolio').value || 'غير متوفر',
+                bio: document.getElementById('bio').value,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // إرسال البيانات إلى Firestore
+            db.collection("applicants").add(applicantData)
+                .then(() => {
+                    // إظهار رسالة النجاح
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('employmentForm').reset();
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    alert("حدث خطأ أثناء إرسال البيانات: " + error.message);
+                })
+                .finally(() => {
+                    // إعادة تمكين الزر
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'تقديم الطلب';
+                });
+        });
+    </script>
+</body>
+</html>
